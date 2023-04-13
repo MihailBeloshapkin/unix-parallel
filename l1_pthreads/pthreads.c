@@ -4,8 +4,6 @@
 #include <sys/wait.h>
 #include <pthread.h>
 
-double accumulator = 0.0;
-
 struct arguments
 {
     int lb;
@@ -52,6 +50,8 @@ int main()
     void *response[thread_count];
     double r;
     
+    int o = n % thread_count;
+
     float delta = n / thread_count;
     for (int i = 0; i < thread_count; i++)
     {
@@ -59,7 +59,7 @@ int main()
         int right_border = delta + 1 + delta * i;
         if (i == thread_count - 1)
         {
-            right_border = right_border - 1;
+            right_border = right_border - 1 + o;
         }
 
         p = (struct par *)malloc(sizeof(struct par));
@@ -81,26 +81,8 @@ int main()
         acc = acc + *(double *)response[i];
     }
 
-    /*
-    p = (struct par *) malloc(sizeof(struct par));
-    p->a = 0.0;
-    p->b = 1;
-    p->e = n/2;
-    p->h = 1.0/n;
-    pthread_create(&w1, NULL, sum, p);
-    p = (struct par *) malloc(sizeof(struct par));
-    p->a = 0.0;
-    p->b = n/2+1;
-    p->e = n-1;
-    p->h = 1.0/n;
-    pthread_create(&w2, NULL, sum, p);
-    */
- //   pthread_join(w1, &r1);
- //   pthread_join(w2, &r2);
-    r = 2 * (f(0.0) + f(1.0) + 2 * acc) / n;
-    printf("\nPI = %g\n", r);
-    //free(r1);
-    //free(r2);
+    double pi = 2 * (f(0.0) + f(1.0) + 2 * acc) / n;
+    printf("\nPI = %lf\n", pi);
     
     for (int i = 0; i < thread_count; i++)
     {
