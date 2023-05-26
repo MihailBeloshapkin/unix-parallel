@@ -5,3 +5,4 @@
 ### Here you can find:
 <li> Integral calculation
 <li> Thread-safe list
+<li> Thread-safe queue
